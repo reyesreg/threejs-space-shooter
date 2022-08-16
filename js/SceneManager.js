@@ -14,6 +14,9 @@ function SceneManager(canvas) {
   var dynamicSubjects = [];
   createSceneSubjects();
 
+  var theMissiles = [];
+  var keyMap = [];
+
   function buildScene() {
     const scene = new THREE.Scene();
     return scene;
@@ -55,13 +58,26 @@ function SceneManager(canvas) {
   }
 
   this.update = function () {
-    if(camera.position.y < 2000) {
+    if (camera.position.y < 2000) {
       camera.position.y += 1;
-      for(let i=0; i<dynamicSubjects.length; i++) {
+
+      for (let i = 0; i < dynamicSubjects.length; i++)
         dynamicSubjects[i].update();
+
+      theSpaceship.handleInput(keyMap, camera);
+
+      if(keyMap[32]) {
+        var x = theSpaceship.model.position.x;
+        var y = theSpaceship.model.position.y + theSpaceship.height/2;
+
+        const m = new Missile(scene, x, y);
+        dynamicSubjects.push(m);
+        theMissiles.push(m);
+        keyMap[32] = false;
       }
+
+      renderer.render(scene, camera);
     }
-    renderer.render(scene, camera);
   };
 
   this.onWindowResize = function () {
@@ -77,5 +93,9 @@ function SceneManager(canvas) {
     camera.top = height / 2;
     camera.bottom = -height / 2;
     camera.updateProjectionMatrix();
+  };
+
+  this.handleInput = function (keyCode, isDown) {
+    keyMap[keyCode] = isDown;
   };
 }

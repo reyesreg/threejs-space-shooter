@@ -11,6 +11,9 @@ render();
 function bindEventListeners() {
   window.onresize = resizeCanvas;
   resizeCanvas();
+
+  window.onkeydown = handleKeyDown;
+  window.onkeyup = handleKeyUp;
 }
 
 function resizeCanvas() {
@@ -21,6 +24,16 @@ function resizeCanvas() {
   canvas.height = canvas.offsetHeight;
 
   sceneManager.onWindowResize();
+}
+
+function handleKeyDown(event) {
+  var keyCode = event.which;
+  sceneManager.handleInput(keyCode, true);
+}
+
+function handleKeyUp(event) {
+  var keyCode = event.which;
+  sceneManager.handleInput(keyCode, false);
 }
 
 function render() {
