@@ -55,6 +55,12 @@ function SceneManager(canvas) {
   }
 
   this.update = function () {
+    if(camera.position.y < 2000) {
+      camera.position.y += 1;
+      for(let i=0; i<dynamicSubjects.length; i++) {
+        dynamicSubjects[i].update();
+      }
+    }
     renderer.render(scene, camera);
   };
 
